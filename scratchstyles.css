@@ -1,0 +1,35 @@
+body {
+  background-color: cornsilk;
+  font-family: Georgia, 'Times New Roman', Times, serif
+  ;
+  color: black;
+  font-size: 11px;
+  text-align: left;
+}
+.center {
+    width: 100vw;
+    height: auto;
+    text-align: center;
+}
+.listsection {
+    width: 100vw;
+    height: auto;
+    justify-content: left;
+    align-content: left;
+}
+.videosection {
+    width: 100vw;
+    height: auto;
+    text-align: right;
+
+}
+
+.video-header {
+  text-align: auto; 
+  margin-bottom:  10px;
+  font-size: 24px;
+  color: black;
+}
+
+
+

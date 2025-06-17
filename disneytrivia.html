@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Disney Trivia Game</title>
+   <p style="text-align:left ;">
+  <a href="index.html">Back to Main Page</a>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      color: #222;
+      text-align: center;
+      padding: 40px;
+    }
+    .trivia-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 60%;
+      margin-top: 15px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 15px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    #score {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 Disney Trivia Game</h1>
+  <div class="trivia-box">
+    <h2 id="round-title">Round 1: Easy</h2>
+    <p id="question-text">Loading question...</p>
+    <input type="text" id="answer" placeholder="Type your answer here..." />
+    <br />
+    <button onclick="submitAnswer()">Submit</button>
+    <p id="feedback"></p>
+    <div id="score">Score: 0</div>
+  </div>
+
+  <script>
+    const allQuestions = {
+      easy: [
+        { q: "What is the name of Mickey Mouse's dog?", a: "pluto" },
+        { q: "Which Disney princess has red hair and lives under the sea?", a: "ariel" },
+        { q: "What is the name of the snowman in Frozen?", a: "olaf" },
+        { q: "What color is Cinderella's dress?", a: "blue" },
+        { q: "Who is Simba’s father?", a: "mufasa" },
+        { q: "What animal is Dumbo?", a: "elephant" },
+        { q: "Which toy is a space ranger in Toy Story?", a: "buzz" },
+        { q: "What does the fairy godmother turn into a carriage?", a: "pumpkin" },
+        { q: "What kind of animal is Bambi?", a: "deer" },
+        { q: "What is the name of Aladdin’s monkey?", a: "abu" },
+        { q: "In Moana, who is the demigod?", a: "maui" }
+      ],
+      medium: [
+        { q: "What is the name of the villain in The Little Mermaid?", a: "ursula" },
+        { q: "What kingdom is Elsa the queen of?", a: "arendelle" },
+        { q: "What does Hakuna Matata mean?", a: "no worries" },
+        { q: "Which Disney movie has the song 'Be Our Guest'?", a: "beauty and the beast" },
+        { q: "Who teaches Mowgli about the Bare Necessities?", a: "baloo" },
+        { q: "What year was Disneyland opened?", a: "1955" },
+        { q: "Who is the villain in The Princess and the Frog?", a: "dr. facilier" },
+        { q: "What’s the name of the villain in Tangled?", a: "mother gothel" },
+        { q: "Which Disney film features Miguel and Día de los Muertos?", a: "coco" },
+        { q: "Who voices Maui in Moana?", a: "dwayne johnson" }
+      ],
+      hard: [
+        { q: "What is the name of the island in Moana?", a: "motunui" },
+        { q: "What is Rapunzel's chameleon’s name?", a: "pascal" },
+        { q: "Which Disney movie was the first to use computer animation?", a: "toy story" },
+        { q: "What are the names of Cinderella's stepsisters?", a: "anastasia and drizella" },
+        { q: "What was the first Disney movie ever made?", a: "snow white" },
+        { q: "Which Disney character sings 'Out There'?", a: "quasimodo" },
+        { q: "What’s the name of the horse in Tangled?", a: "maximus" },
+        { q: "Who was Walt Disney's first character before Mickey?", a: "oswald" },
+        { q: "What is the name of the lantern festival in Tangled?", a: "floating lights" },
+        { q: "What was the name of the girl in Treasure Planet?", a: "captain amelia" }
+      ]
+    };
+
+    let currentRound = 1;
+    let score = 0;
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let maxQuestions = 10;
+    let roundPoints = [1, 2, 3];
+    const roundNames = ["Easy", "Medium", "Hard"];
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function loadRound(roundNum) {
+      const difficulty = roundNum === 1 ? 'easy' : roundNum === 2 ? 'medium' : 'hard';
+      currentQuestions = shuffle([...allQuestions[difficulty]]).slice(0, maxQuestions);
+      currentIndex = 0;
+      document.getElementById("round-title").innerText = `Round ${roundNum}: ${roundNames[roundNum - 1]}`;
+      document.getElementById("score").innerText = `Score: ${score}`;
+      showQuestion();
+    }
+
+    function showQuestion() {
+      document.getElementById("question-text").innerText = currentQuestions[currentIndex].q;
+      document.getElementById("answer").value = "";
+      document.getElementById("feedback").innerText = "";
+    }
+
+    function submitAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+      const correctAnswer = currentQuestions[currentIndex].a.toLowerCase();
+      const feedback = document.getElementById("feedback");
+
+      if (userAnswer === correctAnswer) {
+        score += roundPoints[currentRound - 1];
+        feedback.innerText = "✅ Correct!";
+        feedback.style.color = "green";
+      } else {
+        feedback.innerText = `❌ Incorrect. Correct: ${correctAnswer}`;
+        feedback.style.color = "red";
+      }
+
+      document.getElementById("score").innerText = `Score: ${score}`;
+      currentIndex++;
+
+      if (currentIndex < maxQuestions) {
+        setTimeout(showQuestion, 1200);
+      } else {
+        if (currentRound < 3) {
+          currentRound++;
+          setTimeout(() => loadRound(currentRound), 1500);
+        } else {
+          setTimeout(() => {
+            document.getElementById("question-text").innerText = "🏆 Game Over!";
+            document.getElementById("round-title").innerText = "Thanks for playing!";
+            document.getElementById("answer").style.display = "none";
+            document.querySelector("button").style.display = "none";
+            document.getElementById("feedback").innerText = `Your final score: ${score} points`;
+            document.getElementById("feedback").style.color = "#000";
+          }, 1500);
+        }
+      }
+    }
+
+    // Start game
+    loadRound(currentRound);
+  </script>
+</body>
+</html>
+
